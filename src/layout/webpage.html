@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- The for attribute of <label> must be equal to the id attribute
+ of the related element to bind them together.
+ A label can also be bound to an element by
+ placing the element inside the <label> element. -->
+<html lang = "en">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>Craigslist Finder</title>
+
+		<link rel="stylesheet" href="stylesheets/style.css" />
+	</head>
+
+	<body>
+
+	<!-- Site navigation menu -->
+		<ul class="navbar">
+		  <li><a href="index.html">Home page</a>
+		</ul>
+
+	<!-- Main content -->
+		<h2>Craiglist Puller</h2>
+		<form	action = "/handler.php" 
+				method="post"
+				target = "_self">
+			<fieldset>
+				<legend>Filter</legend>
+				<p>
+					<label for = "loc">Location:</label>
+					<input	type = "text"
+							onfocus="this.value=''"
+							id = "loc"
+							name="loc"
+							placeholder= "default" />
+				</p>
+					
+				<!-- numerical input, limit to 3 digits -->
+				<p>
+					<label for = "range">Range:</label>
+					<input	type = "number"
+							pattern="[0-9]{3}"
+							maxlength="3"
+							max="999"
+							min="0"
+							id = "range"
+							name="range"
+							placeholder= "50"
+							step = "1" />
+					
+					<label for "zip">miles from </label>
+					<input	type = "number"
+							pattern = "[0-9]{5}"
+							maxlength="6"
+							id="zip"
+							name="zip"
+							placeholder="zipcode" />
+				</p>
+			</fieldset>
+		
+				<p>
+					<label for = "submit">Submit</label>
+					<input	type = "submit"
+							id = "submit"
+							value = "Find Listings" />
+				</p>
+		<p Range is 0-999/>
+
+		</form>
+
+	</body>
+</html>
