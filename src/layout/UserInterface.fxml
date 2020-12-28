@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="105.0" layoutY="171.0" text="Location: " />
+      <Label layoutX="111.0" layoutY="207.0" text="Range: " />
+      <Label layoutX="336.0" layoutY="207.0" text="miles from " />
+      <TextField layoutX="175.0" layoutY="167.0" promptText="default" />
+      <TextField layoutX="175.0" layoutY="203.0" promptText="50" />
+      <TextField layoutX="406.0" layoutY="203.0" promptText="zip code" />
+      <ChoiceBox layoutX="174.0" layoutY="86.0" prefWidth="150.0" />
+      <Label layoutX="107.0" layoutY="90.0" text="Category" />
+      <Label layoutX="88.0" layoutY="129.0" text="Subcategory" />
+      <ChoiceBox layoutX="174.0" layoutY="125.0" prefWidth="150.0" />
+      <Label layoutX="152.0" layoutY="31.0" prefHeight="36.0" prefWidth="296.0" text="Craigslist Web Scraper">
+         <font>
+            <Font name="High Tower Text" size="29.0" />
+         </font>
+      </Label>
+   </children>
+</fx:root>
