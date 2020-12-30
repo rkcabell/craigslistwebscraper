@@ -8,8 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class FxmlUiController implements Initializable {
@@ -20,6 +22,18 @@ public class FxmlUiController implements Initializable {
     @FXML
     private URL location;
 
+    @FXML
+    private Label titleLbl;
+
+    @FXML
+    private Button searchBtn;
+    
+     @FXML
+    private Label categoryLbl;
+
+    @FXML
+    private Label subcategoryLbl;
+    
     @FXML
     private TextField locTextfield;
 
