@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import scraper.FxmlUiController?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scraper.FxmlUiController">
+   <children>
+      <BorderPane layoutY="-1.0" prefHeight="383.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <top>
+            <Label prefHeight="36.0" prefWidth="296.0" text="Craigslist Web Scraper" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="High Tower Text" size="29.0" />
+               </font>
+            </Label>
+         </top>
+         <bottom>
+            <Button mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+      <Label layoutX="105.0" layoutY="171.0" text="Location: " />
+      <Label layoutX="111.0" layoutY="207.0" text="Range: " />
+      <Label layoutX="336.0" layoutY="207.0" text="miles from " />
+      <TextField fx:id="locTextfield" layoutX="175.0" layoutY="167.0" promptText="default" />
+      <TextField fx:id="rangeTextfield" layoutX="175.0" layoutY="203.0" promptText="50" />
+      <TextField fx:id="zipTextField" layoutX="406.0" layoutY="203.0" promptText="zip code" />
+      <ChoiceBox fx:id="categoryChoice" layoutX="174.0" layoutY="86.0" prefWidth="150.0" value="sale/wanted">
+        <items>
+          <FXCollections fx:factory="observableArrayList">
+              <String fx:value="community" />
+              <String fx:value="events" />
+              <String fx:value="gigs" />
+              <String fx:value="housing" />
+              <String fx:value="jobs" />
+              <String fx:value="resumes" />
+              <String fx:value="sale/wanted" />
+              <String fx:value="services" />
+          </FXCollections>
+        </items>
+      </ChoiceBox>
+      <Label layoutX="107.0" layoutY="90.0" text="Category" />
+      <Label layoutX="88.0" layoutY="129.0" text="Subcategory" />
+      <ChoiceBox fx:id="subcategoryChoice" layoutX="174.0" layoutY="125.0" prefWidth="150.0" />
+      <ComboBox fx:id="comboChoice" layoutX="207.0" layoutY="287.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
