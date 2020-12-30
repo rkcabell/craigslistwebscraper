@@ -1,4 +1,4 @@
-package craigslistwebscraper;
+package scraper;
 /**
  * @author Ryan Cabell
  * Date Created : 12/16/2020
