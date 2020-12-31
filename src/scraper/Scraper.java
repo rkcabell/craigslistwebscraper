@@ -14,24 +14,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Scraper {
+    private String url;
+    private String website = "craigslist.org";
+    
 
-    private void scrape(String category, String subCategory, String location, int range, int zip) {
+    private void scrape(String location, String category, String subCategory, int range, int zip) {
 
-        /* location formatting must be as follows:
-      * 'location' followed by a period (.) */
-        String currentLocation = "raleigh.";
-        String alternateLocation = "losangeles.";
-        String errorLocation = "";
-
-        //possible sections
-        String freeSection = "d/free-stuff/search/zip";
-        String carSection = "d/cars-trucks/search/cta";
-        String computerPartsSection = "d/computer-parts/search/syp";
-
-        System.out.println("Printing los angeles computer parts page");
-        showInfo(alternateLocation, computerPartsSection);
-        System.out.println("Printing raleigh with no section");
-        showInfo(currentLocation, errorLocation);
+        System.out.println("Printing " + category + ", subcategory " + 
+                subCategory + ", at " + location + " with range of " + 
+                range + " miles from zipcode " + zip);
+        
+        url = generateBaseUrl(location, category, subCategory);
+        
     }
 
     /*
@@ -118,6 +112,42 @@ public class Scraper {
         } catch (IOException ex) {
         } catch (Exception ex) {
         }
+    }
+
+    private String generateBaseUrl(String location, String category, String subCategory) {
+        String temp = website;
+        if(!(location.equalsIgnoreCase("default")))
+            temp = location + "." + website;
+        if(subCategory.equals("all"))
+            temp += "/d/" + category + "/search/" + getCatId(category);
+        else
+            temp += "/d/" + subCategory + "/search/" + getSubCatId(category, subCategory);
+        
+        return temp;
+    }
+
+    private String getCatId(String category) {
+        switch(category){
+            case "community":
+                return "ccc";
+            case "services":
+                return "bbb";
+            case "housing":
+                return "hhh";
+            case "for-sale":
+                return "sss";
+            case "jobs":
+                return "jjj";
+            case "gigs":
+                return "ggg";
+            case "resumes":
+                return "rrr";
+        }
+        return null;
+    }
+
+    private String getSubCatId(String category, String subCategory) {
+        
     }
 
 }

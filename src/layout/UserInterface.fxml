@@ -4,28 +4,27 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
-<?import scraper.FxmlUiController?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scraper.FxmlUiController">
    <children>
-      <BorderPane layoutY="-1.0" prefHeight="383.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <BorderPane layoutX="10.0" layoutY="3.0" prefHeight="383.0" prefWidth="600.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="3.0">
          <top>
-            <Label prefHeight="36.0" prefWidth="296.0" text="Craigslist Web Scraper" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="High Tower Text" size="29.0" />
-               </font>
-            </Label>
+            <Label fx:id="titleLbl" prefHeight="36.0" prefWidth="296.0" text="Craigslist Web Scraper" BorderPane.alignment="CENTER" />
          </top>
          <bottom>
-            <Button mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER" />
+            <Button fx:id="searchBtn" mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
+      <ImageView fitHeight="237.0" fitWidth="374.0" layoutX="264.0" layoutY="-13.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/layout/logo.png" />
+         </image></ImageView>
       <Label layoutX="105.0" layoutY="171.0" text="Location: " />
       <Label layoutX="111.0" layoutY="207.0" text="Range: " />
       <Label layoutX="336.0" layoutY="207.0" text="miles from " />
@@ -36,7 +35,6 @@
         <items>
           <FXCollections fx:factory="observableArrayList">
               <String fx:value="community" />
-              <String fx:value="events" />
               <String fx:value="gigs" />
               <String fx:value="housing" />
               <String fx:value="jobs" />
@@ -46,9 +44,8 @@
           </FXCollections>
         </items>
       </ChoiceBox>
-      <Label layoutX="107.0" layoutY="90.0" text="Category" />
-      <Label layoutX="88.0" layoutY="129.0" text="Subcategory" />
+      <Label fx:id="categoryLbl" layoutX="107.0" layoutY="90.0" text="Category" />
+      <Label fx:id="subcategoryLbl" layoutX="88.0" layoutY="129.0" text="Subcategory" />
       <ChoiceBox fx:id="subcategoryChoice" layoutX="174.0" layoutY="125.0" prefWidth="150.0" />
-      <ComboBox fx:id="comboChoice" layoutX="207.0" layoutY="287.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

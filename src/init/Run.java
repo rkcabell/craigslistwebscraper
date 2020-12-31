@@ -29,11 +29,14 @@ public class Run extends Application {
         FXMLLoader loader = new FXMLLoader();
         try {
             String fxmlDocPath = "./src/layout/userInterface.fxml";
+            String stylesheetPath = "/layout/stylesheet.css";
+            
             FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
             loader.setLocation(FxmlUiController.class.getResource("./layout/userInterface.fxml"));
             mainLayout = loader.load(fxmlStream);
-            Scene scene = new Scene(mainLayout, 600, 275);
+            Scene scene = new Scene(mainLayout, 600, 300);
             stage.setScene(scene);
+            scene.getStylesheets().add(getClass().getResource(stylesheetPath).toExternalForm());
             stage.show();
         } catch (IOException e) {
             System.out.println(e);
