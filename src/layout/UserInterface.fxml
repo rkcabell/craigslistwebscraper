@@ -21,11 +21,10 @@
             <Button fx:id="searchBtn" mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
-      <ImageView fitHeight="380.0" fitWidth="600.0" layoutY="1.0" opacity="0.42" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="237.0" fitWidth="374.0" layoutX="264.0" layoutY="-13.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="/layout/logo.png" />
-         </image>
-      </ImageView>
+         </image></ImageView>
       <Label layoutX="105.0" layoutY="171.0" text="Location: " />
       <Label layoutX="111.0" layoutY="207.0" text="Range: " />
       <Label layoutX="336.0" layoutY="207.0" text="miles from " />
@@ -36,7 +35,6 @@
         <items>
           <FXCollections fx:factory="observableArrayList">
               <String fx:value="community" />
-              <String fx:value="events" />
               <String fx:value="gigs" />
               <String fx:value="housing" />
               <String fx:value="jobs" />
