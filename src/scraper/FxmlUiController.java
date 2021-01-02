@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -102,6 +103,21 @@ public class FxmlUiController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         loadOptions();
     }
+    
+    @FXML
+    private void searchBtn(ActionEvent event) {
+        //Creates searchQuery object from menu
+        System.out.println("Clicked Search");
+        //Make sure necessary fields are populated before processing
+        //check valid range and zipcode
+        
+        searchQuery newSearch = new searchQuery(getCategory(), getSubcategory());
+        
+        System.out.println(newSearch.toString());
+                
+        //open other fxml file with information();
+        
+    }
 
     private void loadOptions() {
         //hardcoded initial saleOptions
@@ -154,6 +170,14 @@ public class FxmlUiController implements Initializable {
     private void updateChoiceBox(ChoiceBox<String> cb, ObservableList<String> optionList) {
         cb.setItems(optionList);
         cb.setValue(optionList.get(0));
+    }
+    
+    private String getCategory() {
+        return categoryChoice.getValue();
+    }
+    
+    private String getSubcategory() {
+        return subcategoryChoice.getValue();
     }
 
 }
