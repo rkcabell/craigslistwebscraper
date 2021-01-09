@@ -1,7 +1,8 @@
 package scraper;
 
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,6 +15,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class FxmlUiController implements Initializable {
 
@@ -55,49 +59,19 @@ public class FxmlUiController implements Initializable {
 
     ObservableList<String> subOptions
             = FXCollections.observableArrayList();
-
-    //The only option for resumes category
-    String[] dfltOptions = {"all"};
-
-    String[] commOptions = {"all", "activities", "artists", "childcare", "classes",
-        "events", "general", "groups", "local news", "lost+found",
-        "missed connections", "musicians", "pets", "politics",
-        "rants & raves", "rideshare", "volunteers"};
-
-    String[] servOptions = {"all", "automotive", "beauty", "cell/mobile", "computer",
-        "creative", "cycle", "event", "farm+garden", "financial", "household",
-        "labor/move", "legal", "lessons", "marine", "pet", "real estate",
-        "skilled trade", "sm biz ads", "travel/vac", "write/ed/tran"};
-
-    String[] housOptions = {"all", "apts / housing", "housing swap", "housing wanted",
-        "office / commercial", "parking / storage", "real estate for sale",
-        "rooms / shared", "rooms wanted", "sublets / temporary",
-        "vacation rentals"};
-
-    String[] saleOptions = {"all", "antiques", "appliances", "arts+crafts",
-        "atv/utv/sno", "auto parts", "aviation", "baby+kid", "barter",
-        "beauty+hlth", "bike parts", "bikes", "boat parts", "boats", "books",
-        "business", "cars+trucks", "cds/dvd/vhs", "cell phones", "clothes+acc",
-        "collectibles", "computer parts", "computers", "electronics",
-        "farm+garden", "free", "furniture", "garage sale", "general",
-        "heavy equip", "household", "jewelry", "materials", "motorcycle parts",
-        "motorcycles", "music instr", "photo+video", "rvs+camp", "sporting",
-        "tickets", "tools", "toys+games", "trailers", "video gaming", "wanted",
-        "wheels+tires"};
-
-    String[] jobsOptions = {"all", "accounting+finance", "admin / office",
-        "arch / engineering", "art / media / design", "biotech / science",
-        "business / mgmt", "customer service", "education", "etc / misc",
-        "food / bev / hosp", "general labor", "government", "human resources",
-        "legal / paralegal", "manufacturing", "marketing / pr / ad",
-        "medical / health", "nonprofit sector", "real estate",
-        "retail / wholesale", "sales / biz dev", "salon / spa / fitness",
-        "security", "skilled trade / craft", "software / qa / dba",
-        "systems / network", "technical support", "transport",
-        "tv / film / video", "web / info design", "writing / editing"};
-
-    String[] gigsOptions = {"all", "computer", "creative", "crew", "domestic",
-        "event", "labor", "talent", "writing"};
+    
+    List<Map<String, String>> options = searchQuery.getOptions();
+    /**
+     * option index is in alphabetical order
+        options.add(dfltOptions); - 0
+        options.add(commOptions); - 1
+        options.add(gigsOptions); - 2
+        options.add(housOptions); - 3
+        options.add(jobsOptions); - 4
+        options.add(saleOptions); - 5
+        options.add(servOptions); - 6
+        
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,65 +79,81 @@ public class FxmlUiController implements Initializable {
     }
     
     @FXML
-    private void searchBtn(ActionEvent event) {
+    private void searchClick(ActionEvent event) throws MalformedURLException {
         //Creates searchQuery object from menu
         System.out.println("Clicked Search");
+        
+        if(!requiredFieldsFilled()){
+            throw new IllegalArgumentException();
+        }
+        
+        /*
         //Make sure necessary fields are populated before processing
-        //check valid range and zipcode
+        //Figure out which contructor to use before calling
+        //check valid range and zipcode if it has one
+        */
+        searchQuery newSearch = new searchQuery(getCategory(), getSubcategory(), getLocation());
         
-        searchQuery newSearch = new searchQuery(getCategory(), getSubcategory());
+        System.out.println("Search is: " + newSearch.toString());
         
-        System.out.println(newSearch.toString());
-                
-        //open other fxml file with information();
+        Scraper scraper = new Scraper();
+        Item[] listings = scraper.scrape(newSearch);
+        
+        //display in other fxml
+        //temporary display foreach loop
+        for (Item item : listings) {
+                System.out.println(item.toString());
+            }
         
     }
-
     private void loadOptions() {
         //hardcoded initial saleOptions
-        populateList(subOptions, saleOptions);
+        populateList(subOptions, options.get(5));
         updateChoiceBox(subcategoryChoice, subOptions);
 
         categoryChoice.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
-
                     switch (new_val) {
                         case "community":
-                            populateList(subOptions, commOptions);
+                            populateList(subOptions, options.get(1));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "services":
-                            populateList(subOptions, servOptions);
+                            populateList(subOptions, options.get(6));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "housing":
-                            populateList(subOptions, housOptions);
+                            populateList(subOptions, options.get(3));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "sale/wanted":
-                            populateList(subOptions, saleOptions);
+                            populateList(subOptions, options.get(5));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "jobs":
-                            populateList(subOptions, jobsOptions);
+                            populateList(subOptions, options.get(4));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "gigs":
-                            populateList(subOptions, gigsOptions);
+                            populateList(subOptions, options.get(2));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         default:
-                            populateList(subOptions, dfltOptions);
+                            //used for resumes (only has "all" option)
+                            populateList(subOptions, options.get(0));
                             updateChoiceBox(subcategoryChoice, subOptions);
 
                     }
                 });
     }
 
-    private void populateList(ObservableList<String> optionList, String[] viableOptions) {
+    private void populateList(ObservableList<String> optionList, Map<String, String> viableOptions) {
         optionList.clear();
-        optionList.addAll(Arrays.asList(viableOptions));
+        viableOptions.entrySet().forEach(entry -> {
+            optionList.add(entry.getKey());
+        });
+        Collections.sort(optionList);
 
     }
 
@@ -173,11 +163,35 @@ public class FxmlUiController implements Initializable {
     }
     
     private String getCategory() {
-        return categoryChoice.getValue();
+        //for-sale is the only category that isnt the same as its display
+        String cat = categoryChoice.getValue();
+        if (cat.equals("sale/wanted"))
+            return "for-sale";
+        return cat;
     }
     
     private String getSubcategory() {
-        return subcategoryChoice.getValue();
+        //find subcat in options
+        String subcat = subcategoryChoice.getValue();
+        for (int i = 0 ; i < options.size() ; i++) {
+            Map<String, String> myMap = options.get(i);
+            System.out.println("Data For Map" + i);
+            for (Entry<String, String> entrySet : myMap.entrySet()) {
+                if(subcat.equals(entrySet.getKey()));
+                    return entrySet.getValue();
+            }
+        }
+        return null;
+    }
+    
+    private String getLocation() {
+        return locTextfield.getText();
+    }
+
+    private boolean requiredFieldsFilled() {
+        //check range and zip
+        
+        return !locTextfield.getText().isEmpty();
     }
 
 }

@@ -18,12 +18,13 @@
             <Label fx:id="titleLbl" prefHeight="36.0" prefWidth="296.0" text="Craigslist Web Scraper" BorderPane.alignment="CENTER" />
          </top>
          <bottom>
-            <Button fx:id="searchBtn" mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER" />
+            <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchClick" text="Search" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
       <ImageView fitHeight="237.0" fitWidth="374.0" layoutX="264.0" layoutY="-13.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="/layout/logo.png" />
+            <!--<Image url="@logo.png" />-->
          </image></ImageView>
       <Label layoutX="105.0" layoutY="171.0" text="Location: " />
       <Label layoutX="111.0" layoutY="207.0" text="Range: " />
