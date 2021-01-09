@@ -18,9 +18,10 @@ public class Scraper {
 
     private String url;
     private final String WEBSITE = "craigslist.org";
+    private final String PREFIX = "https://";
     
-    private void scrape(searchQuery newSearch) throws MalformedURLException {
-
+    public Item[] scrape(searchQuery newSearch) throws MalformedURLException {
+        //checking if empty should be in controller
         if (newSearch.getLocation().isEmpty()) {
             System.out.println("Accessing default location,");
         } else {
@@ -29,15 +30,15 @@ public class Scraper {
                     + newSearch.getSubCategory() + "]");
         }
 
-        URL url = accessPage(newSearch);
+        String link = accessPage(newSearch);
         String pageTitle;
 
         try {
-            Document doc = Jsoup.connect(url.toExternalForm()).get();
+            Document doc = Jsoup.connect(link).get();
             pageTitle = doc.title();
 
             //get info from each listing (element)
-            Item[] listOfItems = new Item[getRangeTo(doc)];
+            Item[] listOfItems = new Item[getRangeTo(newSearch)];
             Elements divData = doc.select("ul.rows li div");
 
             //Uses CSS Selectors:
@@ -55,16 +56,15 @@ public class Scraper {
                 iterator++;
             }
             //System.out.println(Arrays.toString(listOfItems));
-            for (Item item : listOfItems) {
-                System.out.println(item.toString());
-            }
-
+            
+            return listOfItems;
         } catch (IOException ex) {
         } catch (Exception ex) {
         }
+        return new Item[1];
     }
 
-    private URL accessPage(searchQuery newSearch) throws MalformedURLException {
+    private String accessPage(searchQuery newSearch) throws MalformedURLException {
         
         String loc = newSearch.getLocation();
         String cat = newSearch.getCategory();
@@ -85,25 +85,19 @@ public class Scraper {
             url = generateBaseUrl(loc, cat, subcat);
         }
         
-        return new URL(url);
+        return url;
     }
-
-    private URL accessPage(String location, String category, String subCategory) throws MalformedURLException {
-        System.out.println("Accessing " + category + ", subcategory "
-                + subCategory + ", at " + location);
-
-        url = generateBaseUrl(location, category, subCategory);
-
-        return new URL(url);
-    }
-
-    private static int getRangeTo(Document doc) {
+    
+    public int getRangeTo(searchQuery newSearch) throws MalformedURLException {
 
         /*
         *This block goes down the classes of the search legend to eventually get
         *the number of items listed on the page
         */ 
-    
+        String url = accessPage(newSearch);
+        try {
+            Document doc = Jsoup.connect(url).get();
+        
         Elements range = doc.select("div.search-legend div");
         range = range.select("div.paginator.buttongroup.firstpage span");
         range = range.select("span.buttons span");
@@ -117,6 +111,9 @@ public class Scraper {
       *Cut the string after the space (could  be before space)*/
         rangeTo = rangeTo.substring(rangeTo.indexOf(" ") + 1);
         return Integer.parseInt(rangeTo);
+        }
+        catch(Exception e){}
+        return -1;
     }
 
     private static void displayHTML(Document doc) {
@@ -129,10 +126,13 @@ public class Scraper {
     
     private String generateBaseUrl(String location, String category, String subCategory) {
         String temp = WEBSITE;
+        if(location.equals(""))
+            location = "default";
+        
         if (!(location.equalsIgnoreCase("default"))) {
-            temp = location + "." + WEBSITE;
+            temp = PREFIX + location + "." + WEBSITE;
         }
-        if (subCategory.equals("all")) {
+        if (subCategory.equals("default")) {
             temp += "/d/" + category + "/search/" + getCatId(category);
         } else {
             temp += "/d/" + subCategory + "/search/" + getSubCatId(category, subCategory);
@@ -141,9 +141,13 @@ public class Scraper {
     }
 
     private String generateBaseUrl(String location, String category, String subCategory, int range, int zip) {
+        //error: sale/wanted instead of for-sale being passed
         String temp = WEBSITE;
+        if(location.equals(""))
+            location = "default";
+        
         if (!(location.equalsIgnoreCase("default"))) {
-            temp = location + "." + WEBSITE;
+            temp = PREFIX + location + "." + WEBSITE;
         }
         if (subCategory.equals("all")) {
             temp += "/d/" + category + "/search/" + getCatId(category);                     //add range from zip
@@ -238,7 +242,7 @@ public class Scraper {
                     case "cell-phone-mobile-services":
                         id = "cms";
                         break;
-                    case "copmuter-services":
+                    case "computer-services":
                         id = "cps";
                         break;
                     case "creative-services":
@@ -370,9 +374,6 @@ public class Scraper {
                     case "business":
                         id = "bfa";
                         break;
-                    case "":
-                        id = "";
-                        break;
                     case "cars-trucks":
                         id = "cta";
                         break;
@@ -484,6 +485,9 @@ public class Scraper {
                         break;
                     case "business-mgmt":
                         id = "bus";
+                        break;
+                    case "customer-service":
+                        id = "csr";
                         break;
                     case "education-teaching":
                         id = "edu";
