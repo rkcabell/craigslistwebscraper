@@ -132,6 +132,10 @@ public class Scraper {
         if (!(location.equalsIgnoreCase("default"))) {
             temp = PREFIX + location + "." + WEBSITE;
         }
+        else{
+            //needs to use some location
+            //right now there is a throw in controller that stops this from running
+        }
         if (subCategory.equals("default")) {
             temp += "/d/" + category + "/search/" + getCatId(category);
         } else {

@@ -1,5 +1,6 @@
 package scraper;
 
+import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -59,53 +60,49 @@ public class FxmlUiController implements Initializable {
 
     ObservableList<String> subOptions
             = FXCollections.observableArrayList();
-    
+
     List<Map<String, String>> options = searchQuery.getOptions();
+
     /**
-     * option index is in alphabetical order
-        options.add(dfltOptions); - 0
-        options.add(commOptions); - 1
-        options.add(gigsOptions); - 2
-        options.add(housOptions); - 3
-        options.add(jobsOptions); - 4
-        options.add(saleOptions); - 5
-        options.add(servOptions); - 6
-        
+     * option index is in alphabetical order after default
+     * options.add(dfltOptions); - 0 options.add(commOptions); - 1
+     * options.add(gigsOptions); - 2 options.add(housOptions); - 3
+     * options.add(jobsOptions); - 4 options.add(saleOptions); - 5
+     * options.add(servOptions); - 6
+     *
      */
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadOptions();
     }
-    
+
     @FXML
     private void searchClick(ActionEvent event) throws MalformedURLException {
         //Creates searchQuery object from menu
         System.out.println("Clicked Search");
-        
-        if(!requiredFieldsFilled()){
+        //temporary fields filled
+        if (!requiredFieldsFilled())
             throw new IllegalArgumentException();
-        }
-        
         /*
         //Make sure necessary fields are populated before processing
         //Figure out which contructor to use before calling
         //check valid range and zipcode if it has one
-        */
+         */
         searchQuery newSearch = new searchQuery(getCategory(), getSubcategory(), getLocation());
-        
+
         System.out.println("Search is: " + newSearch.toString());
-        
+
         Scraper scraper = new Scraper();
         Item[] listings = scraper.scrape(newSearch);
-        
+
         //display in other fxml
         //temporary display foreach loop
         for (Item item : listings) {
-                System.out.println(item.toString());
-            }
-        
+            System.out.println(item.toString());
+        }
     }
+    
     private void loadOptions() {
         //hardcoded initial saleOptions
         populateList(subOptions, options.get(5));
@@ -119,31 +116,30 @@ public class FxmlUiController implements Initializable {
                             populateList(subOptions, options.get(1));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
-                        case "services":
-                            populateList(subOptions, options.get(6));
+                        case "gigs":
+                            populateList(subOptions, options.get(2));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         case "housing":
                             populateList(subOptions, options.get(3));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
-                        case "sale/wanted":
-                            populateList(subOptions, options.get(5));
-                            updateChoiceBox(subcategoryChoice, subOptions);
-                            break;
                         case "jobs":
                             populateList(subOptions, options.get(4));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
-                        case "gigs":
-                            populateList(subOptions, options.get(2));
+                        case "sale/wanted":
+                            populateList(subOptions, options.get(5));
+                            updateChoiceBox(subcategoryChoice, subOptions);
+                            break;
+                        case "services":
+                            populateList(subOptions, options.get(6));
                             updateChoiceBox(subcategoryChoice, subOptions);
                             break;
                         default:
                             //used for resumes (only has "all" option)
                             populateList(subOptions, options.get(0));
                             updateChoiceBox(subcategoryChoice, subOptions);
-
                     }
                 });
     }
@@ -161,36 +157,37 @@ public class FxmlUiController implements Initializable {
         cb.setItems(optionList);
         cb.setValue(optionList.get(0));
     }
-    
+
     private String getCategory() {
         //for-sale is the only category that isnt the same as its display
         String cat = categoryChoice.getValue();
-        if (cat.equals("sale/wanted"))
+        if (cat.equals("sale/wanted")) {
             return "for-sale";
+        }
         return cat;
     }
-    
+
     private String getSubcategory() {
         //find subcat in options
         String subcat = subcategoryChoice.getValue();
-        for (int i = 0 ; i < options.size() ; i++) {
+        for (int i = 0; i < options.size(); i++) {
             Map<String, String> myMap = options.get(i);
             System.out.println("Data For Map" + i);
             for (Entry<String, String> entrySet : myMap.entrySet()) {
-                if(subcat.equals(entrySet.getKey()));
-                    return entrySet.getValue();
+                if (subcat.equals(entrySet.getKey()));
+                return entrySet.getValue();
             }
         }
         return null;
     }
-    
+
     private String getLocation() {
         return locTextfield.getText();
     }
 
     private boolean requiredFieldsFilled() {
         //check range and zip
-        
+
         return !locTextfield.getText().isEmpty();
     }
 
