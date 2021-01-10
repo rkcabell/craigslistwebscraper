@@ -19,6 +19,8 @@ import javafx.scene.control.TextField;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FxmlUiController implements Initializable {
 
@@ -47,7 +49,10 @@ public class FxmlUiController implements Initializable {
     private TextField rangeTextfield;
 
     @FXML
-    private TextField zipTextField;
+    private TextField zipTextfield;
+    
+    @FXML
+    private Label lblError;
 
     @FXML
     private ChoiceBox<String> categoryChoice;
@@ -83,7 +88,11 @@ public class FxmlUiController implements Initializable {
         System.out.println("Clicked Search");
         //temporary fields filled
         if (!requiredFieldsFilled())
-            throw new IllegalArgumentException();
+            lblError.setText("Location field required");
+        // execute this only if search includes range
+//        if (!zip_RangeIsValid())
+//            lblError.setText("Range or Zipcode invalid");
+        else{
         /*
         //Make sure necessary fields are populated before processing
         //Figure out which contructor to use before calling
@@ -100,6 +109,7 @@ public class FxmlUiController implements Initializable {
         //temporary display foreach loop
         for (Item item : listings) {
             System.out.println(item.toString());
+        }
         }
     }
     
@@ -160,11 +170,10 @@ public class FxmlUiController implements Initializable {
 
     private String getCategory() {
         //for-sale is the only category that isnt the same as its display
-        String cat = categoryChoice.getValue();
-        if (cat.equals("sale/wanted")) {
+        if (categoryChoice.getValue().equals("sale/wanted")) {
             return "for-sale";
         }
-        return cat;
+        return categoryChoice.getValue();
     }
 
     private String getSubcategory() {
@@ -174,8 +183,8 @@ public class FxmlUiController implements Initializable {
             Map<String, String> myMap = options.get(i);
             System.out.println("Data For Map" + i);
             for (Entry<String, String> entrySet : myMap.entrySet()) {
-                if (subcat.equals(entrySet.getKey()));
-                return entrySet.getValue();
+                if (subcat.equals(entrySet.getKey()))
+                    return entrySet.getValue();
             }
         }
         return null;
@@ -189,6 +198,26 @@ public class FxmlUiController implements Initializable {
         //check range and zip
 
         return !locTextfield.getText().isEmpty();
+    }
+
+    private boolean zip_RangeIsValid() {
+        String zip, range;
+        try { 
+            zip = zipTextfield.getText();
+            range = rangeTextfield.getText();
+            Integer.parseInt(range); 
+        }
+        catch(NumberFormatException e) { 
+            return false; 
+        } 
+        
+        if(range.length() < 6){
+            //check if zip is valid
+            Pattern p = Pattern.compile("/(^\\d{5}$)|(^\\d{5}-\\d{4}$)/");
+            Matcher m = p.matcher(zip);
+            return m.matches();
+        }
+        return false;
     }
 
 }
