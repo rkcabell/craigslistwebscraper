@@ -10,7 +10,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import java.io.File;
+import java.io.FileWriter;
 import javafx.fxml.Initializable;
+import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -50,7 +53,7 @@ public class FxmlUiController implements Initializable {
 
     @FXML
     private TextField zipTextfield;
-    
+
     @FXML
     private Label lblError;
 
@@ -76,43 +79,37 @@ public class FxmlUiController implements Initializable {
      * options.add(servOptions); - 6
      *
      */
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadOptions();
     }
 
     @FXML
-    private void searchClick(ActionEvent event) throws MalformedURLException {
+    private void searchClick(ActionEvent event) throws MalformedURLException, IOException {
         //Creates searchQuery object from menu
         System.out.println("Clicked Search");
         //temporary fields filled
-        if (!requiredFieldsFilled())
+        if (!requiredFieldsFilled()) {
             lblError.setText("Location field required");
-        // execute this only if search includes range
-//        if (!zip_RangeIsValid())
-//            lblError.setText("Range or Zipcode invalid");
-        else{
-        /*
+        } // execute this only if search includes range
+        //        if (!zip_RangeIsValid())
+        //            lblError.setText("Range or Zipcode invalid");
+        else {
+            /*
         //Make sure necessary fields are populated before processing
         //Figure out which contructor to use before calling
         //check valid range and zipcode if it has one
-         */
-        searchQuery newSearch = new searchQuery(getCategory(), getSubcategory(), getLocation());
+             */
+            searchQuery newSearch = new searchQuery(getCategory(), getSubcategory(), getLocation());
 
-        System.out.println("Search is: " + newSearch.toString());
+            System.out.println("Search is: " + newSearch.toString());
 
-        Scraper scraper = new Scraper();
-        Item[] listings = scraper.scrape(newSearch);
-
-        //display in other fxml
-        //temporary display foreach loop
-        for (Item item : listings) {
-            System.out.println(item.toString());
-        }
+            Scraper scraper = new Scraper();
+            Item[] listings = scraper.scrape(newSearch);
+            createFile(listings);
         }
     }
-    
+
     private void loadOptions() {
         //hardcoded initial saleOptions
         populateList(subOptions, options.get(5));
@@ -183,8 +180,9 @@ public class FxmlUiController implements Initializable {
             Map<String, String> myMap = options.get(i);
             System.out.println("Data For Map" + i);
             for (Entry<String, String> entrySet : myMap.entrySet()) {
-                if (subcat.equals(entrySet.getKey()))
+                if (subcat.equals(entrySet.getKey())) {
                     return entrySet.getValue();
+                }
             }
         }
         return null;
@@ -202,22 +200,41 @@ public class FxmlUiController implements Initializable {
 
     private boolean zip_RangeIsValid() {
         String zip, range;
-        try { 
+        try {
             zip = zipTextfield.getText();
             range = rangeTextfield.getText();
-            Integer.parseInt(range); 
+            Integer.parseInt(range);
+        } catch (NumberFormatException e) {
+            return false;
         }
-        catch(NumberFormatException e) { 
-            return false; 
-        } 
-        
-        if(range.length() < 6){
+
+        if (range.length() < 6) {
             //check if zip is valid
             Pattern p = Pattern.compile("/(^\\d{5}$)|(^\\d{5}-\\d{4}$)/");
             Matcher m = p.matcher(zip);
             return m.matches();
         }
         return false;
+    }
+
+    private void createFile(Item[] listings) throws IOException {
+        //temporary display foreach loop
+        File log = new File("latestSearch.txt");
+        if (log.createNewFile()) {
+            System.out.println("File created: " + log.getName());
+        } else {
+            File f_old = log;
+            f_old.delete();
+            System.out.println("File created: " + log.getName());
+
+        }
+        String name = log.getName();
+        FileWriter f2 = new FileWriter(log, false);
+        f2.write(name);
+        for (Item item : listings) {
+            f2.write(item.toString() + '\n');
+        }
+        f2.close();
     }
 
 }
