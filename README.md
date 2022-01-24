@@ -4,4 +4,4 @@ ABOUT:
 Collects data from a single page from craiglist and displays it.
 
 Dependencies:  
--Jsoup
+-Jsoup for HTML parsing in Java
