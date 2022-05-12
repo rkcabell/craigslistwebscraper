@@ -37,6 +37,7 @@ public class Run extends Application {
             Scene scene = new Scene(mainLayout, 600, 300);
             stage.setScene(scene);
             scene.getStylesheets().add(getClass().getResource(stylesheetPath).toExternalForm());
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             System.out.println(e);

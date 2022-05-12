@@ -56,7 +56,6 @@ public class Scraper {
                 iterator++;
             }
             //System.out.println(Arrays.toString(listOfItems));
-            
             return listOfItems;
         } catch (IOException ex) {
         } catch (Exception ex) {

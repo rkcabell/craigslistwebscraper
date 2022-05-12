@@ -45,6 +45,7 @@
           </FXCollections>
         </items>
       </ChoiceBox>
+      <Label fx:id="lblError" layoutX="77.0" layoutY="273.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="300.0" />
       <Label fx:id="categoryLbl" layoutX="107.0" layoutY="90.0" text="Category" />
       <Label fx:id="subcategoryLbl" layoutX="88.0" layoutY="129.0" text="Subcategory" />
       <ChoiceBox fx:id="subcategoryChoice" layoutX="174.0" layoutY="125.0" prefWidth="150.0" />
